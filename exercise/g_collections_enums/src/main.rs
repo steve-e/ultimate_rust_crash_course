@@ -9,15 +9,30 @@
 // - `Miss`
 //
 // You will need to complete 1b as well before you will be able to run this program successfully.
+#[derive(Debug)]
+enum Shot {
+    Bullseye,
+    Hit(f64),
+    Miss,
+}
 
 impl Shot {
     // Here is a method for the `Shot` enum you just defined.
     fn points(self) -> i32 {
-        // 1b. Implement this method to convert a Shot into points
-        // - return 5 points if `self` is a `Shot::Bullseye`
-        // - return 2 points if `self` is a `Shot::Hit(x)` where x < 3.0
-        // - return 1 point if `self` is a `Shot::Hit(x)` where x >= 3.0
-        // - return 0 points if `self` is a Miss
+        match self {
+            Self::Bullseye => 5,
+            Self::Hit(x) if x < 3.0 => 2,
+            Self::Hit(x)  => 1,
+            Self::Miss => 0,
+            // 1b. Implement this method to convert a Shot into points
+            // - return 5 points if `self` is a `Shot::Bullseye`
+            // - return 2 points if `self` is a `Shot::Hit(x)` where x < 3.0
+            // - return 1 point if `self` is a `Shot::Hit(x)` where x >= 3.0
+            // - return 0 points if `self` is a Miss
+        }
+    }
+    fn print_description(&self) {
+        
     }
 }
 
@@ -35,10 +50,24 @@ fn main() {
     //      - Between 1.0 and 5.0 -- `Shot::Hit(value)`
     //      - Greater than 5.0 -- `Shot::Miss`
 
-
+    for c in arrow_coords {
+   
+        let shot = match c.distance_from_center() {
+            x if x <1.0 => Shot::Bullseye,
+            x if x >5.0 => Shot::Miss,
+            x => Shot::Hit(x),
+        };
+        print!("\t{:?}: \t", shot);
+        c.print_description();
+        shots.push(shot);
+    }
     let mut total = 0;
     // 3. Finally, loop through each shot in shots and add its points to total
 
+    for s in shots {
+  
+        total += s.points()
+    }
     println!("Final point total is: {}", total);
 }
 
@@ -58,9 +87,9 @@ impl Coord {
             "coord is {:.1} away, at ({:.1}, {:.1})",
             self.distance_from_center(),
             self.x,
-            self.y);
+            self.y
+        );
     }
-
 }
 
 // Generate some random coordinates
